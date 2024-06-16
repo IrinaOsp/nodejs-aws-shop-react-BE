@@ -19,8 +19,14 @@ export class ProductServiceStack extends cdk.Stack {
       }
     );
 
-    const api = new apigateway.RestApi(this, "GetProductsListApi", {
-      restApiName: "Products list",
+    const getOneProductFunction = new NodejsFunction(this, "getProductsById", {
+      functionName: "getProductsById",
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: resolve("handlers/getProductsById.ts"),
+    });
+
+    const api = new apigateway.RestApi(this, "ProductsApi", {
+      restApiName: "Products",
       defaultCorsPreflightOptions: {
         allowOrigins: apigateway.Cors.ALL_ORIGINS,
         allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
@@ -29,9 +35,14 @@ export class ProductServiceStack extends cdk.Stack {
     });
 
     const productsResource = api.root.addResource("products");
+    const oneProductResource = productsResource.addResource("{id}");
     const productsIntegration = new apigateway.LambdaIntegration(
       getProductsListFunction
     );
+    const oneProductIntegration = new apigateway.LambdaIntegration(
+      getOneProductFunction
+    );
     productsResource.addMethod("GET", productsIntegration);
+    oneProductResource.addMethod("GET", oneProductIntegration);
   }
 }

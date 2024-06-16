@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: AWS course OpenAPI task 3
+  description: Product Service for AWS course in RS School
+  version: 1.0
+servers:
+  - url: https://stapi.co/api - TODO
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      description: Get list of all products
+      operationId: getProductsList
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        500:
+          description: Unexpected error
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      description: Single product data
+      operationId: getProductsById
+      parameters:
+        - name: productId
+          in: query
+          description: Product ID
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Unexpected error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Product:
+      type: object
+      description: Product search criteria
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          description: Product name
+          format: text
+          example: "Product 1"
+        price:
+          type: number
+          example: 100
