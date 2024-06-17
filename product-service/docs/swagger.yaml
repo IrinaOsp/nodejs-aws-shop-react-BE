@@ -66,11 +66,16 @@ components:
         id:
           type: number
           example: 1
-        name:
+        title:
           type: string
           description: Product name
           format: text
           example: "Product 1"
+        description:
+          type: string
+          description: Product description
+          format: text
+          example: "Product description"
         price:
           type: number
           example: 100

@@ -1,12 +1,13 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
 import products from "../data/products";
+import headers from "../utils/headers";
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     return {
       statusCode: 200,
-      headers: { "Content-Type": "text/plain" },
+      headers,
       body: JSON.stringify(products),
     };
   } catch (error) {
@@ -14,7 +15,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     return {
       statusCode: 500,
-      headers: { "Content-Type": "text/plain" },
+      headers,
       body: message.toString() || "",
     };
   }
